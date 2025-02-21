@@ -28,10 +28,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 INTERNAL_IPS = [
     # ...
-    "127.0.0.1",
+    "127.0.0.1",'localhost'
     # ...
 ]
 
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://localhost:3000",
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:3000",
+]
 # Application definition
 
 INSTALLED_APPS = [
@@ -339,7 +347,7 @@ chore: (updating grunt tasks etc; no production code change)
 
 """
 
-MERCHANT = "00000000-0000-0220-0000-000000000000"
+MERCHANT = "00000000-0000-0000-0000-000000000000"
 
 SANDBOX = True
 if SANDBOX:
@@ -347,7 +355,7 @@ if SANDBOX:
 else:
     sandbox = 'www'
 
-ZP_API = f"https://{sandbox}.zarinpal.com/pg/services/WebGate/wsdl"
+ZP_API = f"https://www.zarinpal.com/pg/services/WebGate/wsdl"
 ZP_API_REQUEST = f"https://{sandbox}.zarinpal.com/pg/v4/payment/request.json"
 ZP_API_STARTPAY = f"https://{sandbox}.zarinpal.com/pg/StartPay/"
 ZP_API_VERIFY = f"https://{sandbox}.zarinpal.com/pg/v4/payment/verify.json"

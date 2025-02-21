@@ -2,6 +2,7 @@ import inspect
 from time import sleep
 
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.dispatch import receiver
 from django.db.models.signals import post_save, pre_save
 
@@ -43,25 +44,40 @@ def update_total_sales_of_transaciton(sender, instance, created, **kwargs):
     transaction.save()
 
 
+User = get_user_model()
+
+from django.http import HttpRequest
+from rest_framework.request import Request as DRFRequest
+
 @receiver(post_save, sender=CartItem)
 def update_cart_customer(sender, instance, created, **kwargs):
-    cart_id = instance.cart.id
     request = None
+    # Iterate through all frames in the stack
     for frame_record in inspect.stack():
-        if frame_record[3] == 'get_response':
-            request = frame_record[0].f_locals['request']
-            """https://docs.python.org/3/library/inspect.html"""
-            """https://www.geeksforgeeks.org/inspect-module-in-python/"""
-            break
-    print('request', request)
+        frame = frame_record.frame
+        frame_locals = frame.f_locals
+
+        # Check if 'request' exists in the frame's locals
+        if 'request' in frame_locals:
+
+            candidate = frame_locals['request']
+            # Verify the candidate is a request object
+            if isinstance(candidate, (HttpRequest, DRFRequest)):
+                request = candidate
+                break  # Exit loop once request is found
+    print('request',request)
+    # Proceed if request was found
     if request:
         user = request.user
+        # Ensure user is a valid User instance
         if not isinstance(user, User):
             user = None
     else:
         user = None
-    if user:
-        cart = Cart.objects.get(id=cart_id)
-        cart.customer = Customer.objects.get(user_id=user.id)
-        cart.save()
 
+    # Update cart customer if user is valid
+    if user:
+        cart = instance.cart
+        # Assuming Customer is linked to User via a one-to-one relationship
+        cart.customer = user.customer
+        cart.save()

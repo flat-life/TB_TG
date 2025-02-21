@@ -88,7 +88,7 @@ class ProductSerializer(TranslatableModelSerializer):
         model = Product
         fields = ['id', 'translations', 'inventory', 'org_price',
                   'price', 'price_with_tax', 'collection_id', 'promotions', 'value_feature', 'images', 'secondhand',
-                  'title', 'description', 'slug']
+                  'title', 'description', 'slug', 'badge']
 
     images = ProductImageSerializer(many=True, read_only=True)
     collection_id = serializers.IntegerField(required=False)
@@ -119,12 +119,13 @@ class ProductSerializer(TranslatableModelSerializer):
 
 class SimpleProductSerializer(TranslatableModelSerializer):
     translations = TranslatedFieldsField(shared_model=Product)
+    images = ProductImageSerializer(many=True, read_only=True)
     org_price = serializers.DecimalField(max_digits=15, decimal_places=2, source='unit_price')
     price = serializers.DecimalField(max_digits=15, decimal_places=2, source='price_after_off')
 
     class Meta:
         model = Product
-        fields = ['id', 'translations', 'org_price', 'price', 'title', 'description']
+        fields = ['id','images' ,'translations', 'org_price', 'price', 'title', 'description', 'badge']
 
     """validation example"""
     # def validate(self,data):

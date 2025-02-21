@@ -127,7 +127,7 @@
     }
 
 
-    makeAuthenticatedRequest('/conversations/', 'GET')
+    makeAuthenticatedRequest('/api-v1/conversations/', 'GET')
         .then(data => {
             const conversationsList = document.getElementById('conversations-list');
             conversationsList.innerHTML = '';
@@ -200,11 +200,11 @@
         .catch(error => console.error('Error fetching conversations:', error));
 
     function fetchMessages(conversationId) {
-        makeAuthenticatedRequest(`/conversations/${conversationId}/`, 'GET')
+        makeAuthenticatedRequest(`/api-v1/conversations/${conversationId}/`, 'GET')
             .then(data => {
 
                 let USER_ID = 0
-                makeAuthenticatedRequest('/core/auth/users/me/', 'GET')
+                makeAuthenticatedRequest('/api-v1/auth/users/me/', 'GET')
                     .then(id => {
 
                         socket.onmessage = function (event) {

@@ -100,7 +100,7 @@ class TestSelenium(LiveServerTestCase):
         #                               {'headers': {'Authorization': authorization_header_value}})
         # print(authorization_header_value)
         # sleep(2)
-        # self.driver.get('http://localhost:8000/core/auth/users/')
+        # self.driver.get('http://localhost:8000/api-v1/auth/users/')
         # sleep(20)
         # pytest.fail(f"Test failed: no alert get from login!")
 

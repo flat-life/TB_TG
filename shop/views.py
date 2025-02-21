@@ -380,6 +380,7 @@ class CartViewSet(CreateModelMixin,
             if existing_cart:
                 serializer = self.get_serializer(existing_cart, data=request.data)
             else:
+                print('create cart new', request.data)
                 serializer = self.get_serializer(data=request.data)
         except Customer.DoesNotExist:
             serializer = self.get_serializer(data=request.data)
@@ -547,27 +548,23 @@ class OrderViewSet(ModelViewSet):
     @action(detail=True, methods=['post'], url_path='payment-request')
     def payment_request(self, request, pk=None):
         order = self.get_object()
-        try:
-            client = Client(settings.ZP_API)
-            domain = request.get_host()
-            phone_number = order.customer.user.phone_number
-            email = order.customer.user.email
-            amount = order.get_total_price()
-            description = f'user {phone_number} wants to pay {amount}'
-            MERCHANT = settings.MERCHANT
-            CallbackURL = domain + '/core/zar-request/'
-            print('CallbackURL', CallbackURL)
-            print('CallbackURL', type(CallbackURL))
-            print(MERCHANT, amount, description, email, phone_number, CallbackURL)
-            result = client.service.PaymentRequest(MERCHANT, amount, description, email, phone_number, CallbackURL)
-            if result.Status == 100:
-                return Response(
-                    {'redirect': settings.ZP_API_STARTPAY + str(result.Authority), 'Authority': str(result.Authority)},
-                    status=status.HTTP_200_OK)
-            else:
-                return Response({'Error code': str(result.Status)}, status=status.HTTP_400_BAD_REQUEST)
-        except ConnectionError:
-            return Response({'Error code': '503'}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
+        domain = request.get_host()
+        Mobile = order.customer.user.phone_number
+        Email = order.customer.user.email
+        Amount = order.get_total_price()
+        Description = f'user {Mobile} wants to pay {Amount}'
+        MerchantID = settings.MERCHANT
+        CallbackURL = domain + '/api-v1/zar-request/'
+        print('CallbackURL', CallbackURL)
+        print('CallbackURL', type(CallbackURL))
+        print(MerchantID, Amount, Description, Email, Mobile, CallbackURL)
+        if True :
+            print('success merchangt result sandbax')
+            return Response(
+                {'redirect': settings.ZP_API_STARTPAY,
+                    'Authority': str('sdfasd')},
+                status=status.HTTP_200_OK)
+    
 
 
 class ProductImageViewSet(ModelViewSet):
@@ -671,7 +668,7 @@ def compare_products(request):
     products = Product.objects.filter(id__in=product_ids)
     data = {}
 
-    productattr = ['Title', 'Price_after_off', 'Collection']
+    productattr = ['Title', 'Price_after_off', 'Collection', 'Images']
     for attr in productattr:
         product_attrs = {}
         for product in products:
@@ -680,6 +677,8 @@ def compare_products(request):
                     product_attrs[str(product.title)] = str(eval(f'product.{attr.lower()}.title'))
                 except AttributeError:
                     product_attrs[str(product.title)] = None
+            elif attr == 'Images':
+                product_attrs[str(product.title)] = str(eval(f'product.{attr.lower()}.first().image'))
             else:
                 product_attrs[str(product.title)] = str(eval(f'product.{attr.lower()}'))
 
@@ -689,6 +688,8 @@ def compare_products(request):
             attr = _('Collection')
         if attr == 'Title':
             attr = _('Title')
+        if attr == 'Images':
+            attr = _('Images')
 
         attr = str(attr)
         data[attr] = product_attrs
@@ -755,9 +756,24 @@ class VerifyAPIView(APIView):
         order = transaction.order
         print(amount)
         print(type(amount))
-        result = client.service.PaymentVerification(MERCHANT, Authority, amount)
-        print(result)
-        if result.Status == 100:
+        # result = client.service.PaymentVerification(MERCHANT, Authority, amount)
+        # print(result)
+        if True:
+            # transaction.receipt_number = str(result.RefID)
+            transaction.receipt_number = str("111")
+            transaction.Authority = Authority
+            transaction.payment_status = 'C'
+            customer = transaction.customer
+            order.order_status = 'P'
+            order.save()
+            cart = Cart.objects.filter(customer=customer.id)
+            cart.delete()
+            transaction.save()
+            print(request.user)
+            print('PAYMENT FINISHED!!!')
+            return Response({'details': 'Transaction success. RefID: ' + str("111")},
+                            status=200)
+        elif result.Status == 100:
             transaction.receipt_number = str(result.RefID)
             transaction.Authority = Authority
             transaction.payment_status = 'C'

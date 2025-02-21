@@ -45,6 +45,7 @@ class UserLoginOTPView(APIView):
             return Response({'message': _('Invalid Email')}, status=status.HTTP_400_BAD_REQUEST)
 
         otp_key = f'otp:{user.email}'
+        print(otp_key)
         redis_connection = redis.StrictRedis(host=settings.REDIS_HOST_OTP, port=settings.REDIS_PORT,
                                              db=settings.REDIS_DB)
         otp_is_send = redis_connection.get(otp_key)

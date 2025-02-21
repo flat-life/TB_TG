@@ -86,12 +86,12 @@
     function startConvo() {
         let phone_number = null
         let user_id = null
-        makeAuthenticatedRequest('/core/auth/users/me/', 'GET')
+        makeAuthenticatedRequest('/api-v1/auth/users/me/', 'GET')
             .then(id => {
                 phone_number = '09353220545'
                 user_id = id.id
                 localStorage.setItem('user_id', user_id);
-                url = '/conversations/start/'
+                url = '/api-v1/conversations/start/'
                 method = 'POST'
                 context = {phone_number: phone_number}
                 makeAuthenticatedRequest(url, method, context)
@@ -108,7 +108,7 @@
 
         // Get references to the input and button elements
         const messageInput = document.getElementById('message-input');
-        const sendButton = document.getElementById('send-button');
+        const sendButton = document.getElementById('send-docbutton');
 
         // Event listener for when the send button is clicked
         sendButton.addEventListener('click', function () {
@@ -201,7 +201,7 @@
     }
 
     function fetchMessages(conversationId) {
-        makeAuthenticatedRequest(`/conversations/${conversationId}/`, 'GET')
+        makeAuthenticatedRequest(`/api-v1/conversations/${conversationId}/`, 'GET')
             .then(data => {
 
                 let USER_ID = Number(localStorage.getItem('user_id'));

@@ -127,6 +127,8 @@ class Product(TranslatableModel, BaseModel):
                                  null=True, blank=True)
     secondhand = models.BooleanField(_('Seccond Hand'), default=False, )
 
+    badge = models.CharField(_("Badge"), max_length=255, null=True, blank=True)
+
     # extra_data = models.JSONField(verbose_name='Features', null=True, blank=True)
 
     def __repr__(self):

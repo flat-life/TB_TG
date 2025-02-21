@@ -40,12 +40,12 @@ urlpatterns = i18n_patterns(
     path('rosetta/', include('rosetta.urls')),
     path('api-v1/', include('shop.urls')),
     path("__debug__/", include("debug_toolbar.urls")),
-    path("core/", include('core.urls', namespace='core')),
+    path("api-v1/", include('core.urls', namespace='core')),
     path("", include('front.urls', namespace='front')),
-    path("blog/", include('blog.urls', namespace='blog')),
+    path("api-v1/blog/", include('blog.urls', namespace='blog')),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
-    path('conversations/', include('chat.urls')),
+    path('api-v1/conversations/', include('chat.urls')),
     prefix_default_language=False
 )
 

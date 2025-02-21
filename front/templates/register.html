@@ -113,7 +113,7 @@
                 const token = getToken();
 
                 if (token) {
-                    const endpoint = '/core/auth/jwt/verify/';
+                    const endpoint = '/api-v1/auth/jwt/verify/';
 
                     makeAuthenticatedRequest(endpoint, 'POST', context = {token: token})
                         .then(response => {
@@ -149,7 +149,7 @@
                 console.log(phone_number.value)
                 console.log(password.value)
                 console.log(email.value)
-                let endpoint = '/core/auth/users/';
+                let endpoint = '/api-v1/auth/users/';
 
                 makeAuthenticatedRequest(endpoint, 'POST', context = {
                     'phone_number': phone_number.value,

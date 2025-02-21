@@ -17,7 +17,7 @@ class TestAuth:
 
     def test_create_user_return_201(self, api_client):
         response = api_client.post(
-            '/core/users/',
+            '/api-v1/users/',
             {
                 "phone_number": "09887776655",
                 "email": "yosofasadi22@gmail.com",
@@ -27,7 +27,7 @@ class TestAuth:
         )
         assert response.status_code == status.HTTP_201_CREATED
         response = api_client.post(
-            '/core/users/',
+            '/api-v1/users/',
             {
                 "phone_number": "09887776655",
                 "email": "yosofasaddi22@gmail.com",
@@ -39,7 +39,7 @@ class TestAuth:
 
     def test_login_otp(self, api_client):
         response = api_client.post(
-            '/core/users/',
+            '/api-v1/users/',
             {
                 "phone_number": "09887776655",
                 "email": "yosofasadi22@gmail.com",
@@ -49,7 +49,7 @@ class TestAuth:
         )
         assert response.status_code == status.HTTP_201_CREATED
         response = api_client.post(
-            '/core/login-otp/',
+            '/api-v1/login-otp/',
             {
                 "email": "yosofasadi22@gmail.com",
             },
@@ -59,7 +59,7 @@ class TestAuth:
 
     def test_verify_otp(self, api_client):
         response = api_client.post(
-            '/core/users/',
+            '/api-v1/users/',
             {
                 "phone_number": "09887776655",
                 "email": "yosofasadi22@gmail.com",
@@ -69,7 +69,7 @@ class TestAuth:
         )
         assert response.status_code == status.HTTP_201_CREATED
         response = api_client.post(
-            '/core/login-otp/',
+            '/api-v1/login-otp/',
             {
                 "email": "yosofasadi22@gmail.com",
             },
@@ -82,7 +82,7 @@ class TestAuth:
                                        db=settings.REDIS_DB).get(otp_key)
         stored_otp = str(stored_otp.decode('utf_8'))
         response = api_client.post(
-            '/core/verify-otp/',
+            '/api-v1/verify-otp/',
             {
                 "email": "yosofasadi22@gmail.com",
                 "otp": f"{str(stored_otp)}"

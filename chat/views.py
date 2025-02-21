@@ -32,6 +32,7 @@ def start_conversation(request, ):
     print('conversation', conversation)
     print('user', request.user)
     if conversation.exists():
+        print('convo exist')
         return redirect(reverse('get_conversation', args=(conversation[0].id,)))
     else:
         conversation = Conversation.objects.create(id=request.user.id, sender_conversation=request.user,

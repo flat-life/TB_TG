@@ -26,6 +26,7 @@ class Authentication:
 
         subject = 'Your verification Code'
         message = f'Your code is: {otp}'
+        print(f'code : {otp}')
 
         try:
             email_from = 'djmailyosof@gmail.com'

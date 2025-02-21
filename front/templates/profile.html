@@ -362,7 +362,7 @@
         const token = getToken();
 
         if (token) {
-            const endpoint = '/core/auth/jwt/verify/';
+            const endpoint = '/api-v1/auth/jwt/verify/';
 
             makeAuthenticatedRequest(endpoint, 'POST', context = {token: token})
                 .then(response => {
@@ -498,7 +498,7 @@
         const id = document.getElementById('idu').value;
         const phoneNumber = document.getElementById('phone_number').value;
 
-        const endpoint = '/core/auth/users/me/';
+        const endpoint = '/api-v1/auth/users/me/';
 
         const requestBody = {
             email: email,
@@ -519,7 +519,7 @@
     }
 
     function fetchUserData() {
-        const endpoint = '/core/auth/users/me/';
+        const endpoint = '/api-v1/auth/users/me/';
 
         makeAuthenticatedRequest(endpoint, 'GET')
             .then(data => {
@@ -543,7 +543,7 @@
         const new_password = document.getElementById('newpass').value;
         const current_password = document.getElementById('currpass').value;
 
-        const endpoint = '/core/auth/users/set_password/';
+        const endpoint = '/api-v1/auth/users/set_password/';
 
         const requestBody = {
             new_password: new_password,
